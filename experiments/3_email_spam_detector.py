@@ -13,6 +13,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import confusion_matrix
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
 import joblib
 
 def load_data(path):
@@ -24,9 +26,14 @@ def train_model(df):
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+    # model = make_pipeline(
+    #     CountVectorizer(), # Convert text to vectors (numbers)
+    #     MultinomialNB() # Train a Naive Bayes classifier on the vectors
+    # )
+
     model = make_pipeline(
-        CountVectorizer(), # Convert text to vectors (numbers)
-        MultinomialNB() # Train a Naive Bayes classifier on the vectors
+        TfidfVectorizer(), # Convert text to vectors (numbers)
+        LogisticRegression(max_iter=1000) # Train a Naive Bayes classifier on the vectors
     )
 
     # Train Model
@@ -41,7 +48,7 @@ def train_model(df):
     cm = confusion_matrix(y_test, y_pred)
 
     # Save the model
-    joblib.dump(model, "email_spam_detector_model.pkl")
+    # joblib.dump(model, "email_spam_detector_model.pkl")
 
     return model, accuracy, cm
 
