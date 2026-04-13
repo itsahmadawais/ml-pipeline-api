@@ -24,8 +24,8 @@ def train_model(df):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     model = make_pipeline(
-        CountVectorizer(),
-        MultinomialNB()
+        CountVectorizer(), # Convert text to vectors (numbers)
+        MultinomialNB() # Train a Naive Bayes classifier on the vectors
     )
 
     # Train Model
