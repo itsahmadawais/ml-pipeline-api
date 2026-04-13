@@ -38,7 +38,7 @@ def predict_house_price(model, size, bedrooms, car_space):
     return model.predict(new_house)[0]
 
 
-df = load_data("house_data.csv")
+df = load_data("../data/house_data.csv")
 
 model, error = train_model(df)
 print("MSE:", error)

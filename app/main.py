@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 import pandas as pd
 import joblib
-from app.schemas import HouseInput
+from app.schemas import HouseInput, EmailInput
 
-model = joblib.load("models/house_model.pkl")
+house_model = joblib.load("models/house_model.pkl")
+email_spam_model = joblib.load("models/email_spam_detector_model.pkl")
 
 app = FastAPI()
 
@@ -18,5 +19,12 @@ def predict(data: HouseInput):
         columns=["house_size", "bedrooms", "car_space"]
     )
 
-    prediction = model.predict(input_data)[0]
+    prediction = house_model.predict(input_data)[0]
     return {"predicted_price": prediction}
+
+@app.post("/predict_spam")
+def predict_spam(data: EmailInput):
+    prediction = email_spam_model.predict([data.email])[0]
+    return {
+        "is_spam": bool(prediction)
+    }
