@@ -24,7 +24,12 @@ def predict(data: HouseInput):
 
 @app.post("/predict_spam")
 def predict_spam(data: EmailInput):
-    prediction = email_spam_model.predict([data.email])[0]
+    # prediction = email_spam_model.predict([data.email])[0]
+    prob = email_spam_model.predict_proba([data.email])[0] # Probability of being spam
+    
+    prediction = int(prob[1] > 0.5) # Classify as spam if probability > 0.5
+
     return {
-        "is_spam": bool(prediction)
+        "is_spam": bool(prediction),
+        "spam_probability": prob[1]
     }

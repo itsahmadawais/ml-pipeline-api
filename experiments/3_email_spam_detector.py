@@ -12,6 +12,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import confusion_matrix
 import joblib
 
 def load_data(path):
@@ -37,17 +38,20 @@ def train_model(df):
     # Evaluate
     accuracy = accuracy_score(y_test, y_pred)
 
+    cm = confusion_matrix(y_test, y_pred)
+
     # Save the model
     joblib.dump(model, "email_spam_detector_model.pkl")
 
-    return model, accuracy
+    return model, accuracy, cm
 
 def predict_email(model, email):
     return model.predict([email])[0]
 
 df = load_data("../data/emails.csv")
-model, accuracy = train_model(df)
+model, accuracy, cm = train_model(df)
 
 print("Accuracy:", accuracy)
 emailPrediction = predict_email(model, "Congratulations! You've won a free ticket to the Bahamas. Click here to claim.")
 print("Prediction:", emailPrediction)
+print("Confusion Matrix:\n", cm)
